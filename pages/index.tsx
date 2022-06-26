@@ -1,6 +1,8 @@
+import { VStack } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { ListWithDetails } from "../app/components/ListWithDetails";
+import { LocalFilter } from "../app/components/LocalFilter";
 
 const Home: NextPage = () => {
   return (
@@ -16,6 +18,7 @@ const Home: NextPage = () => {
           href="/favicon.ico"
         />
       </Head>
+      <LocalFilter/>
       <ListWithDetails/>
     </div>
   );

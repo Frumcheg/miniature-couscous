@@ -18,6 +18,7 @@ function toLocalUrl(url: string): string {
 export const apiOfIceAndFire = createApi({
   reducerPath: "apiOfIceAndFire",
   baseQuery: fetchBaseQuery({ baseUrl: "https://anapioficeandfire.com/api/" }),
+  tagTypes: ["Pages"],
   endpoints: (builder) => ({
     getCharacters: builder.query<{ apiResponse: CharacterList, pagingUrls: PagingUrls }, PagingArgs>({
       query: ({ page, pageSize }) => `/characters?page=${page}&pageSize=${pageSize}`,
@@ -26,7 +27,8 @@ export const apiOfIceAndFire = createApi({
           char.localUrl = toLocalUrl(char.url);
         });
         return { apiResponse, pagingUrls: parseLinkHeader(meta?.response?.headers.get("link") ?? "") };
-      }
+      },
+      providesTags: ["Pages"]
     }),
     getCharacter: builder.query<Character, string>({
       query: (id) => `https://anapioficeandfire.com/api/characters/${id}`,

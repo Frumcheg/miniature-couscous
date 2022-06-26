@@ -4,11 +4,10 @@ import {
   IconButton,
   Tooltip, Text, Select
 } from "@chakra-ui/react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store";
+import { useDispatch } from "react-redux";
 import { setCurrentPage, setPageSize } from "./paginationSlice";
-import { useGetCharactersQuery } from "../apiService";
 import { useMemo } from "react";
+import { useGetCurrentPageData } from "./useGetCurrentPageData";
 
 function parseQuery(url: string, key: string) {
   const [, query] = url.match(/.+\?(.+)/s) ?? []
@@ -17,17 +16,16 @@ function parseQuery(url: string, key: string) {
 }
 
 export function Pagination() {
-  const { pageSize, currentPage } = useSelector((state: RootState) => state.pagination);
-  const { data, error, isLoading } = useGetCharactersQuery({ page: currentPage, pageSize });
+  const { data, pageSize, currentPage } = useGetCurrentPageData();
   const dispatch = useDispatch();
   const lastPageNumber = useMemo(() => {
-    if (!data) return
-    const page = parseQuery(data.pagingUrls.last, "page") ?? undefined
-    return page ? Number(page) : undefined
-  }, [data?.pagingUrls.last])
-  if (!data) return null;
-  return (
-    <Flex
+    if (!data) return;
+    const page = parseQuery(data.pagingUrls.last, "page") ?? undefined;
+    return page ? Number(page) : undefined;
+  }, [data?.pagingUrls.last]);
+  return useMemo(() => {
+    if (!data) return null;
+    return <Flex
       justifyContent="space-between"
       m={4}
       alignItems="center"
@@ -114,6 +112,6 @@ export function Pagination() {
           />
         </Tooltip>
       </Flex>
-    </Flex>
-  );
+    </Flex>;
+  }, [currentPage, pageSize]);
 }

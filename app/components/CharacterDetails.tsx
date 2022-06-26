@@ -23,7 +23,7 @@ export function CharacterDetails() {
   if (!data) return null;
   return (
     <>
-      <Heading>
+      <Heading my={4}>
         {data.name}
       </Heading>
       <OptionalValue
