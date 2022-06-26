@@ -10,6 +10,11 @@ function parseLinkHeader(header: string): PagingUrls {
   return Object.fromEntries(header.split(",").map(parseEntry));
 }
 
+function toLocalUrl(url: string): string {
+  const match = url.match(/https:\/\/anapioficeandfire.com\/api(.+)/) ?? [];
+  return match[1];
+}
+
 export const apiOfIceAndFire = createApi({
   reducerPath: "apiOfIceAndFire",
   baseQuery: fetchBaseQuery({ baseUrl: "https://anapioficeandfire.com/api/" }),
@@ -17,11 +22,14 @@ export const apiOfIceAndFire = createApi({
     getCharacters: builder.query<{ apiResponse: CharacterList, pagingUrls: PagingUrls }, PagingArgs>({
       query: ({ page, pageSize }) => `/characters?page=${page}&pageSize=${pageSize}`,
       transformResponse(apiResponse: CharacterList, meta) {
+        apiResponse.forEach(char => {
+          char.localUrl = toLocalUrl(char.url);
+        });
         return { apiResponse, pagingUrls: parseLinkHeader(meta?.response?.headers.get("link") ?? "") };
       }
     }),
     getCharacter: builder.query<Character, string>({
-      query: (url) => url,
+      query: (id) => `https://anapioficeandfire.com/api/characters/${id}`,
     }),
   }),
 });

@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { App } from "../app";
+import { ListWithDetails } from "../app/components/ListWithDetails";
 
 const Home: NextPage = () => {
   return (
@@ -16,7 +16,7 @@ const Home: NextPage = () => {
           href="/favicon.ico"
         />
       </Head>
-      <App/>
+      <ListWithDetails/>
     </div>
   );
 };

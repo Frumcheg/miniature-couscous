@@ -1,5 +1,6 @@
 export interface Character {
   url: string,
+  localUrl: string,
   name: string,
   gender: string,
   culture: string,
