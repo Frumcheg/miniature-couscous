@@ -22,7 +22,6 @@ export function Pagination() {
   const dispatch = useDispatch();
   const lastPageNumber = useMemo(() => {
     if (!data) return
-    console.log(data.pagingUrls);
     const page = parseQuery(data.pagingUrls.last, "page") ?? undefined
     return page ? Number(page) : undefined
   }, [data?.pagingUrls.last])

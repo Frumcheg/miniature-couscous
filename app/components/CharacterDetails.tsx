@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useGetCharacterQuery } from "../apiService";
-import { Container, Heading, Spinner, Box } from "@chakra-ui/react";
+import { Heading, Box } from "@chakra-ui/react";
+import { PageLoader } from "./PageLoader";
 
 function OptionalValue({ label, value }: { value: string | undefined, label: string }) {
   if (!value) return null;
@@ -10,7 +11,7 @@ function OptionalValue({ label, value }: { value: string | undefined, label: str
 }
 
 function formatList(list: string[]) {
-  return list.some(str => str.length > 0) ? list.join(", ") : undefined
+  return list.some(str => str.length > 0) ? list.join(", ") : undefined;
 }
 
 export function CharacterDetails() {
@@ -18,10 +19,10 @@ export function CharacterDetails() {
   const { id } = router.query as { id: string };
   const { data, error, isLoading } = useGetCharacterQuery(id);
   if (error) return <>Oh no, there was an error</>;
-  if (isLoading) return <Spinner size="xl"/>;
+  if (isLoading) return <PageLoader/>;
   if (!data) return null;
   return (
-    <Container>
+    <>
       <Heading>
         {data.name}
       </Heading>
@@ -53,6 +54,6 @@ export function CharacterDetails() {
         label="playedBy"
         value={formatList(data.playedBy)}
       />
-    </Container>
+    </>
   );
 }
